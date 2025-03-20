@@ -40,7 +40,7 @@ pipeline {
                 always {
                     emailext(
                         subject: "Test Results for Jenkins Build #${BUILD_NUMBER}",
-                        body: "Unit and Integration Tests completed. Check the logs for details.",
+                        body: "Unit and Integration Tests completed.",
                         to: EMAIL_RECIPIENTS
                     )
                 }
@@ -67,7 +67,7 @@ pipeline {
                 always {
                     emailext(
                         subject: "Security Scan Results for Jenkins Build #${BUILD_NUMBER}",
-                        body: "Security Scan completed. Review logs for vulnerabilities.",
+                        body: "Security Scan completed.",
                         to: EMAIL_RECIPIENTS
                     )
                 }
