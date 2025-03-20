@@ -112,20 +112,42 @@ pipeline {
 
     post {
         always {
-            echo "Sending email notification about the pipeline execution."
+            echo "📧 Sending email notification..."
         }
         success {
             emailext(
-                subject: "Jenkins Build #${BUILD_NUMBER} Successful!",
-                body: "The Jenkins build was successful.\n\nJob: ${env.JOB_NAME}\nBuild: #${env.BUILD_NUMBER}\nView Build: ${env.BUILD_URL}\nDeployment was successful!",
-                to: EMAIL_RECIPIENTS
+                subject: "✅ Jenkins Build #${BUILD_NUMBER} Successful!",
+                body: """
+                    <h2 style="color: green;">✅ Jenkins Build Successful!</h2>
+                    <p>The Jenkins build for <strong>${env.JOB_NAME}</strong> was successful. 🎉</p>
+                    <ul>
+                        <li><strong>Build Number:</strong> #${env.BUILD_NUMBER}</li>
+                        <li><strong>View Build:</strong> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></li>
+                        <li><strong>Deployment Status:</strong> ✅ Successful</li>
+                    </ul>
+                    <br>
+                    <p>🚀 Happy Deploying!</p>
+                """,
+                mimeType: 'text/html',
+                to: "${EMAIL_RECIPIENTS}"
             )
         }
         failure {
             emailext(
-                subject: "Jenkins Build #${BUILD_NUMBER} Failed!",
-                body: "The Jenkins build FAILED!\n\nJob: ${env.JOB_NAME}\nBuild: #${env.BUILD_NUMBER}\nView Build Logs: ${env.BUILD_URL}\nCheck the logs to fix the issue.",
-                to: EMAIL_RECIPIENTS
+                subject: "❌ Jenkins Build #${BUILD_NUMBER} Failed!",
+                body: """
+                    <h2 style="color: red;">❌ Jenkins Build Failed!</h2>
+                    <p>The Jenkins build for <strong>${env.JOB_NAME}</strong> has <strong>failed</strong>. ❌</p>
+                    <ul>
+                        <li><strong>Build Number:</strong> #${env.BUILD_NUMBER}</li>
+                        <li><strong>View Build Logs:</strong> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></li>
+                        <li><strong>Error Details:</strong> Please check the logs for more information.</li>
+                    </ul>
+                    <br>
+                    <p>⚠️ Please fix the errors and re-run the pipeline.</p>
+                """,
+                mimeType: 'text/html',
+                to: "${EMAIL_RECIPIENTS}"
             )
         }
     }
